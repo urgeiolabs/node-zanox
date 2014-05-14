@@ -2,6 +2,9 @@
  * Module dependencies
  */
 var request = require('superagent')
+  , path = require('JSONPath').eval
+  , accounting = require('accounting')
+  , currency = require('currency-symbol-map')
   , _ = require('underscore');
 
 var endpoint = 'https://api.zanox.com/json/2011-03-01/products';
