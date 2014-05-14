@@ -11,15 +11,20 @@ module.exports = function (opts) {
 };
 
 var Zanox = function Zanox (opts) {
-  this.keywords = opts;
+  this._keywords = opts;
+
+  // Setup defaults
+  _.defaults(this, {
+    _partnership: 'all'
+  });
 };
 
 Zanox.prototype.id = function (id) {
-  return this.id = id, this;
+  return this._id = id, this;
 };
 
 Zanox.prototype.keywords = function (kw) {
-  return this.keywords = kw, this;
+  return this._keywords = kw, this;
 };
 
 Zanox.prototype.country = function (country) {
@@ -27,9 +32,9 @@ Zanox.prototype.country = function (country) {
 };
 
 Zanox.prototype.category = function (category) {
-  if (!this.categories) this.categories = [];
+  if (!this._categories) this._categories = [];
 
-  return this.categories.push(category), this;
+  return this._categories.push(category), this;
 };
 
 Zanox.prototype.program = function (program) {
@@ -79,10 +84,10 @@ Zanox.prototype.done = function (cb) {
   request
     .get(endpoint)
     .query({searchtype: this._searchType})
-    .query({connectid: this.id})
-    .query({q: this.keywords})
+    .query({connectid: this._id})
+    .query({q: this._keywords})
     .query({region: this._country})
-    .query({merchantcategory: this.categories && this.categories.join(',')})
+    .query({merchantcategory: this._categories})
     .query({partnership: this._partnership})
     .query({minprice: this._minPrice})
     .query({maxprice: this._maxPrice})
@@ -90,7 +95,6 @@ Zanox.prototype.done = function (cb) {
     .query({items: this._numItems})
     .query({programs: this._programs && this._programs.join(',')})
     .end(function (err, res) {
-      console.log(res.req.path);
       if (err) return cb(err);
       return cb(err, res.body);
     });
