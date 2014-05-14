@@ -99,7 +99,7 @@ Zanox.prototype.done = function (cb) {
     .query({minprice: this._minPrice})
     .query({maxprice: this._maxPrice})
     .query({ean: this._ean})
-    .query({items: this._numItems || 1})
+    .query({items: 1})
     .query({programs: this._programs && this._programs.join(',')})
     .end(function (err, res) {
       // Handle connection errors
