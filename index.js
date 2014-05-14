@@ -11,7 +11,11 @@ module.exports = function (opts) {
 };
 
 var Zanox = function Zanox (opts) {
-  this._keywords = opts;
+  if ('object' === typeof opts) {
+    this._keywords = opts.keywords;
+  } else {
+    this._keywords = opts;
+  }
 
   // Setup defaults
   _.defaults(this, {
