@@ -99,10 +99,62 @@ Zanox.prototype.done = function (cb) {
     .query({minprice: this._minPrice})
     .query({maxprice: this._maxPrice})
     .query({ean: this._ean})
-    .query({items: this._numItems})
+    .query({items: this._numItems || 1})
     .query({programs: this._programs && this._programs.join(',')})
     .end(function (err, res) {
+      // Handle connection errors
       if (err) return cb(err);
-      return cb(err, res.body);
+
+      // Handle client errors
+      if (res.body.message) return cb(new Error(res.body.message));
+
+      // Callback
+      return cb(null, parseResults(res.body, extractions));
     });
+};
+
+var formatPrice = function (p) {
+  var amount = p.price
+    , code = p.currency;
+
+  if (!amount || !code) return null;
+  return accounting.formatMoney(amount, currency(code));
+};
+
+var extractions = [
+  { name: 'id', query: '$..@id' },
+  { name: 'name', query: '$..name' },
+  { name: 'url', query: '$..trackingLink..ppc' },
+  { name: 'listPrice',
+    query: '$..productItem[0]',
+    transform: formatPrice
+  }
+];
+
+var first = function (obj, query) {
+  var res = path(obj, query);
+  return res.length ? res[0] : null;
+};
+
+var parseResults = function (obj, extractions) {
+  var that = this;
+
+  var res = _
+    .chain(extractions)
+    .map(function (x) {
+      var key = x.name
+        , val = first(obj, x.query);
+
+      // Transform value if we have a transform available
+      if (x.transform && val !== null) val = x.transform.call(that, val);
+
+      return [key, val];
+    })
+    .filter(function (x) {
+      return x[1] !== null;
+    })
+    .object()
+    .value();
+
+  return _.keys(res).length ? res : null;
 };
