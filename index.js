@@ -39,9 +39,7 @@ Zanox.prototype.country = function (country) {
 };
 
 Zanox.prototype.category = function (category) {
-  if (!this._categories) this._categories = [];
-
-  return this._categories.push(category), this;
+  return this._category = category, this;
 };
 
 Zanox.prototype.program = function (program) {
@@ -88,13 +86,14 @@ Zanox.prototype.searchType = function (t) {
 };
 
 Zanox.prototype.done = function (cb) {
-  request
+
+  var r = request
     .get(endpoint)
     .query({searchtype: this._searchType})
     .query({connectid: this._id})
     .query({q: this._keywords})
     .query({region: this._country})
-    .query({merchantcategory: this._categories})
+    .query({merchantcategory: this._category})
     .query({partnership: this._partnership})
     .query({minprice: this._minPrice})
     .query({maxprice: this._maxPrice})
