@@ -86,6 +86,7 @@ Zanox.prototype.searchType = function (t) {
 };
 
 Zanox.prototype.done = function (cb) {
+  var that = this;
 
   var r = request
     .get(endpoint)
@@ -108,16 +109,24 @@ Zanox.prototype.done = function (cb) {
       if (res.body.message) return cb(new Error(res.body.message));
 
       // Callback
-      return cb(null, parseResults(res.body, extractions));
+      return cb(null, parseResults.call(that, res.body, extractions));
     });
 };
 
 var formatPrice = function (p) {
   var amount = p.price
-    , code = p.currency;
+    , code = p.currency
+    , decimal, thousand;
 
   if (!amount || !code) return null;
-  return accounting.formatMoney(amount, currency(code));
+
+  if (~['DE'].indexOf(this._country)) {
+    decimal = ','; thousand = '.';
+  } else {
+    decimal = '.'; thousand = ',';
+  }
+
+  return accounting.formatMoney(amount, currency(code), null, thousand, decimal);
 };
 
 var extractions = [
