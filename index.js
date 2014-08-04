@@ -112,7 +112,7 @@ Zanox.prototype.done = function (cb) {
       if (this._one) {
         products = _.first(products);
       } else if (this._limit) {
-        products = _.first(products, limit);
+        products = _.first(products, this._limit);
       }
 
       // Callback
