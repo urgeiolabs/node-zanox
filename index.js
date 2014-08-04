@@ -85,70 +85,58 @@ Zanox.prototype.done = function (cb) {
     .query({minprice: this._minPrice})
     .query({maxprice: this._maxPrice})
     .query({ean: this._ean})
-    .query({items: 1})
+    .query({items: this._one ? 1 : this._limit})
     .query({programs: this._programs && this._programs.join(',')})
     .end(function (err, res) {
       // Handle connection errors
       if (err) return cb(err);
 
+      // Grab body
+      var body = res.body;
+
       // Handle client errors
-      if (res.body.message) return cb(new Error(res.body.message));
+      if (body.message) return cb(new Error(res.body.message));
+
+      // Extract products
+      var products = body.productItems && body.productItems.productItem;
+      if (!products) products = [];
+
+      // Format results
+      products = format(products);
+
+      // Limit results
+      if (this._one) {
+        products = _.first(products);
+      } else if (this._limit) {
+        products = _.first(products, limit);
+      }
 
       // Callback
-      return cb(null, parseResults.call(that, res.body, extractions));
-    });
+      return cb(null, products);
+    }.bind(this));
 };
 
-var formatPrice = function (p) {
-  var amount = p.price
-    , code = p.currency
-    , decimal, thousand;
+var format = function (products) {
+  return products.map(function (p) {
+    var price = p.price
+      , name = p.name
+      , link = links(p.trackingLinks);
 
-  if (!amount || !code) return null;
+    if (!price || !name || !link) return null;
 
-  if (~['DE'].indexOf(this._country)) {
-    decimal = ','; thousand = '.';
-  } else {
-    decimal = '.'; thousand = ',';
-  }
-
-  return accounting.formatMoney(amount, currency(code), null, thousand, decimal);
+    return {
+      name: name,
+      id: p['@id'],
+      listPrice: price,
+      currency: p.currency,
+      url: link
+    }
+  }).filter(function (p) {
+    return p;
+  });
 };
 
-var extractions = [
-  { name: 'id', query: '$..@id' },
-  { name: 'name', query: '$..name' },
-  { name: 'url', query: '$..trackingLink..ppc' },
-  { name: 'listPrice',
-    query: '$..productItem[0]',
-    transform: formatPrice
-  }
-];
-
-var first = function (obj, query) {
-  var res = path(obj, query);
-  return res.length ? res[0] : null;
-};
-
-var parseResults = function (obj, extractions) {
-  var that = this;
-
-  var res = _
-    .chain(extractions)
-    .map(function (x) {
-      var key = x.name
-        , val = first(obj, x.query);
-
-      // Transform value if we have a transform available
-      if (x.transform && val !== null) val = x.transform.call(that, val);
-
-      return [key, val];
-    })
-    .filter(function (x) {
-      return x[1] !== null;
-    })
-    .object()
-    .value();
-
-  return _.keys(res).length ? res : null;
+var links = function (links) {
+  if (!links) return null;
+  return links.trackingLink[0].ppc || null;
 };
