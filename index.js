@@ -74,9 +74,7 @@ Zanox.prototype.limit = function (limit) {
 
 
 Zanox.prototype.done = function (cb) {
-  var that = this;
-
-  var r = request
+  return request
     .get(endpoint)
     .query({searchtype: this._searchType})
     .query({connectid: this._id})
