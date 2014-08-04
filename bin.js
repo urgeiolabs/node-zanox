@@ -27,6 +27,10 @@ var opts = nomnom
     default: '',
     abbr: 'c'
   })
+  .option('page', {
+    help: 'Results page',
+    abbr: 'g'
+  })
   .option('one', {
     help: 'Limit to one result',
     flag: true,
@@ -39,6 +43,7 @@ zanox({keywords: opts.keywords})
   .id(opts.id)
   .program(opts.program)
   .price(opts.price)
+  .page(opts.page)
   .one(opts.one)
   .done(function (err, res) {
     if (err) throw err;

@@ -57,6 +57,11 @@ Zanox.prototype.price = function (price) {
   return this;
 };
 
+Zanox.prototype.page = function (page) {
+  if ('undefined' === typeof page) return this;
+  return this._page = page, this;
+};
+
 Zanox.prototype.one = function (one) {
   one = ('undefined' === typeof one) ? true : !!one;
   return this._one = one, this;
@@ -72,7 +77,6 @@ Zanox.prototype.limit = function (limit) {
   return this._limit = limit, this;
 };
 
-
 Zanox.prototype.done = function (cb) {
   return request
     .get(endpoint)
@@ -84,9 +88,9 @@ Zanox.prototype.done = function (cb) {
     .query({partnership: this._partnership})
     .query({minprice: this._minPrice})
     .query({maxprice: this._maxPrice})
-    .query({ean: this._ean})
     .query({items: this._one ? 1 : this._limit})
     .query({programs: this._programs && this._programs.join(',')})
+    .query({page: this._page})
     .end(function (err, res) {
       // Handle connection errors
       if (err) return cb(err);
