@@ -57,21 +57,21 @@ Zanox.prototype.price = function (price) {
   return this;
 };
 
-Zanox.prototype.ean = function (ean) {
-  return this._ean = ean, this;
-};
-
-Zanox.prototype.numItems = function (n) {
-  return this._numItems = n, this;
-};
-
-Zanox.prototype.partnership = function (p) {
-  return this._partnership = p, this;
+Zanox.prototype.one = function (one) {
+  one = ('undefined' === typeof one) ? true : !!one;
+  return this._one = one, this;
 };
 
 Zanox.prototype.searchType = function (t) {
+  if ('contextual' !== t && 'phrase' !== t) throw new Error('Invalid search type');
   return this._searchType = t, this;
 };
+
+Zanox.prototype.limit = function (limit) {
+  if (!limit) return this;
+  return this._limit = limit, this;
+};
+
 
 Zanox.prototype.done = function (cb) {
   var that = this;
