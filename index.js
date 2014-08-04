@@ -22,7 +22,7 @@ var Zanox = function Zanox (opts) {
 
   // Setup defaults
   _.defaults(this, {
-    _partnership: 'all'
+    _partnership: 'confirmed'
   });
 };
 
