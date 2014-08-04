@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "zanox-lookup": "./bin.js"
+  },
   "author": "Adam Rudd",
   "license": "MIT",
   "dependencies": {
