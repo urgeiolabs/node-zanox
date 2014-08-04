@@ -110,7 +110,7 @@ Zanox.prototype.done = function (cb) {
 
       // Limit results
       if (this._one) {
-        products = _.first(products);
+        products = _.first(products) || null;
       } else if (this._limit) {
         products = _.first(products, this._limit);
       }
