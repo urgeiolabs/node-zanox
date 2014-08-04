@@ -37,6 +37,10 @@ var opts = nomnom
     abbr: '1',
     default: false
   })
+  .option('limit', {
+    help: 'Limit number of results',
+    abbr: 'l'
+  })
   .parse();
 
 zanox({keywords: opts.keywords})
@@ -45,6 +49,7 @@ zanox({keywords: opts.keywords})
   .price(opts.price)
   .page(opts.page)
   .one(opts.one)
+  .limit(opts.limit)
   .done(function (err, res) {
     if (err) throw err;
     console.log(JSON.stringify(res));
