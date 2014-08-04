@@ -30,7 +30,8 @@ var opts = nomnom
   .option('one', {
     help: 'Limit to one result',
     flag: true,
-    abbr: '1'
+    abbr: '1',
+    default: false
   })
   .parse();
 
