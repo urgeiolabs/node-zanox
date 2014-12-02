@@ -9,6 +9,10 @@
   "bin": {
     "zanox-lookup": "./bin.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/urgeiolabs/node-zanox"
+  },
   "author": "Adam Rudd",
   "license": "MIT",
   "dependencies": {
