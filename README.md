@@ -12,6 +12,7 @@ This module is a simple wrapper around the zanox product search API. See [the do
 
 Full example
 
+    ```javascript
     var zanox = require('zanox-lookup');
 
     zanox({keywords: 'test'})
@@ -23,6 +24,7 @@ Full example
       .done(function (err, results) {
 
       })
+    ```
 
 ## License
 
