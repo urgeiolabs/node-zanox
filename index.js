@@ -67,6 +67,13 @@ Zanox.prototype.one = function (one) {
   return this._one = one, this;
 };
 
+Zanox.prototype.exactMatch = function (exactMatch) {
+  if (!exactMatch) return this;
+  return this._exactMatch = exactMatch, this;
+  //exactMatch = ('undefined' === typeof exactMatch) ? true : !!exactMatch;
+  //return this._exactMatch = exactMatch, this;
+};
+
 Zanox.prototype.searchType = function (t) {
   if ('contextual' !== t && 'phrase' !== t) throw new Error('Invalid search type');
   return this._searchType = t, this;
@@ -88,7 +95,6 @@ Zanox.prototype.done = function (cb) {
     .query({partnership: this._partnership})
     .query({minprice: this._minPrice})
     .query({maxprice: this._maxPrice})
-    .query({items: this._one ? 1 : this._limit})
     .query({programs: this._programs && this._programs.join(',')})
     .query({page: this._page})
     .end(function (err, res) {
@@ -110,7 +116,25 @@ Zanox.prototype.done = function (cb) {
 
       // Limit results
       if (this._one) {
-        products = _.first(products) || null;
+        if (this._exactMatch) {
+          var a;
+          var qw = this._keywords.split(' ');
+          var matches = false;
+          products.some(function(p) {
+            matches = true;
+            qw.forEach(function(w) {
+              if (p.name.indexOf(w) === -1)
+                matches = false;
+            });
+            if (matches) {
+              a = p;
+              return true;
+            }
+          });
+          products = a || null;
+        } else {
+          products = _.first(products) || null;
+        }
       } else if (this._limit) {
         products = _.first(products, this._limit);
       }
