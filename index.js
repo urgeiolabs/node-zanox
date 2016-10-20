@@ -2,7 +2,6 @@
  * Module dependencies
  */
 var request = require('superagent')
-  , path = require('JSONPath').eval
   , accounting = require('accounting')
   , currency = require('currency-symbol-map')
   , _ = require('underscore');

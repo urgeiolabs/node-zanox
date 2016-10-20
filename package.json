@@ -1,6 +1,6 @@
 {
   "name": "zanox-lookup",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A simple wrapper around the zanox product lookup api",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,6 @@
     "underscore": "^1.6.0",
     "superagent": "^0.18.0",
     "currency-symbol-map": "^1.2.0",
-    "JSONPath": "^0.10.0",
     "accounting": "^0.3.2"
   }
 }
