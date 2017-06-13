@@ -122,7 +122,7 @@ Zanox.prototype.done = function (cb) {
           products.some(function(p) {
             matches = true;
             qw.forEach(function(w) {
-              if (p.name.indexOf(w) === -1)
+              if (!p.name || p.name.indexOf(w) === -1)
                 matches = false;
             });
             if (matches) {
