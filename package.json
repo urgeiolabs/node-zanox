@@ -1,6 +1,6 @@
 {
   "name": "zanox-lookup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple wrapper around the zanox product lookup api",
   "main": "index.js",
   "scripts": {

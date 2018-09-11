@@ -119,6 +119,7 @@ class Zanox {
       if (this._maxPrice) query.maxprice = this._maxPrice
       if (this._programs) query.programs = this._programs.join(',')
       if (this._page) query.page = this._page
+      if (this._limit) query.items = this._limit
 
       axios.get(endpoint, { params: query })
       .then(({ data }) => {
@@ -160,8 +161,6 @@ class Zanox {
           } else {
             products = _.first(products) || null
           }
-        } else if (this._limit) {
-          products = _.first(products, this._limit)
         }
 
         return resolve(products)
