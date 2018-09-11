@@ -15,7 +15,6 @@ var opts = nomnom
   })
   .option('keywords', {
     help: 'Keywords to search',
-    required: true,
     abbr: 'k'
   })
   .option('program', {
@@ -34,12 +33,16 @@ var opts = nomnom
   .option('one', {
     help: 'Limit to one result',
     flag: true,
-    abbr: '1',
+    abbr: 'o',
     default: false
   })
   .option('limit', {
     help: 'Limit number of results',
     abbr: 'l'
+  })
+  .option('ean', {
+    help: 'Use EAN number',
+    abbr: 'e'
   })
   .parse();
 
@@ -50,7 +53,7 @@ zanox({keywords: opts.keywords})
   .page(opts.page)
   .one(opts.one)
   .limit(opts.limit)
-  .done(function (err, res) {
-    if (err) throw err;
-    console.log(JSON.stringify(res));
-  });
+  .ean(opts.ean)
+  .done()
+  .then(res => console.log(JSON.stringify(res)))
+  .catch(err => { throw err })

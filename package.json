@@ -1,6 +1,6 @@
 {
   "name": "zanox-lookup",
-  "version": "0.7.2",
+  "version": "1.0.0",
   "description": "A simple wrapper around the zanox product lookup api",
   "main": "index.js",
   "scripts": {
@@ -16,9 +16,7 @@
   "author": "Adam Rudd",
   "license": "MIT",
   "dependencies": {
-    "underscore": "^1.6.0",
-    "superagent": "^0.18.0",
-    "currency-symbol-map": "^1.2.0",
-    "accounting": "^0.3.2"
+    "axios": "^0.18.0",
+    "underscore": "^1.6.0"
   }
 }
